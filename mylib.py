@@ -1,31 +1,27 @@
 import numpy as np
 
-class MyComplex():
+'''class MyComplex():
 	def __init__ ( self , real ,imag=0.0):
-		'''stores the real and the imaginary part'''
         self.r=real
- 		self.i=imag
+        self.i=imag
 	def display_cmplx( self ):
-		'''displays the complex number'''
- 		print( self.r , ',' , self.i , 'j' ,sep=' ' )
+		print( self.r , ',' , self.i , 'j' ,sep=' ' )
 	def add_cmplx(self ,c1 ,c2 ):
-        '''performs addition of complex numbers c1 and c2'''
- 		self.r=c1.r+c2.r
+        self.r=c1.r+c2.r
  		self.i=c1.i+c2.i
  		return MyComplex( self )
 	def sub_cmplx(self ,c1 ,c2 ):
-        '''performs subtraction of complex numbers c1 and c2'''
- 		self.r=c1.r - c2.r
+        self.r=c1.r - c2.r
  		self.i=c1.i - c2.i
  		return MyComplex( self )
 	def mul_cmplx(self ,c1 ,c2 ):
-        '''performs multiplication of complex numbers c1 and c2'''
- 		self.r=c1.r*c2.r-c1.r*c2.i
+        self.r=c1.r*c2.r-c1.r*c2.i
  		self.i=c1.i*c2.r + c1.r*c2.i
  		return MyComplex( self )
 	def mod_cmplx( self ):
-        '''returns the modulus of the complex number'''
- 		return np.sqrt( self.r**2 + self.i**2)
+        return np.sqrt( self.r**2 + self.i**2)
+    '''
+    
 
 def read_matrix(filename):
 	''' reading the matrix elements from an external file and returns the data in the form of nested lists'''
@@ -79,7 +75,7 @@ def random_normal(c,N,seed=0.1):
         x_i=x_i_next
     return L
 
-def random_gen_LCG(a,c,m,N,seed=10):
+def random_gen_LCG(a=1103515245,c=12345,m=32768,N=1000,seed=10):
     '''generates a list of random numbers using linear congruential generator. N= number of random numbers to be generated.'''
     L=[]
     x_i=seed
