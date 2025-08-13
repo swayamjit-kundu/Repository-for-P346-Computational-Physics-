@@ -3,24 +3,28 @@ import numpy as np
 class MyComplex():
 	def __init__ ( self , real ,imag=0.0):
 		'''stores the real and the imaginary part'''
- 		self.r=real
+        self.r=real
  		self.i=imag
 	def display_cmplx( self ):
-		'''displays'''
+		'''displays the complex number'''
  		print( self.r , ',' , self.i , 'j' ,sep=' ' )
 	def add_cmplx(self ,c1 ,c2 ):
+        '''performs addition of complex numbers c1 and c2'''
  		self.r=c1.r+c2.r
  		self.i=c1.i+c2.i
  		return MyComplex( self )
 	def sub_cmplx(self ,c1 ,c2 ):
+        '''performs subtraction of complex numbers c1 and c2'''
  		self.r=c1.r - c2.r
  		self.i=c1.i - c2.i
  		return MyComplex( self )
 	def mul_cmplx(self ,c1 ,c2 ):
+        '''performs multiplication of complex numbers c1 and c2'''
  		self.r=c1.r*c2.r-c1.r*c2.i
  		self.i=c1.i*c2.r + c1.r*c2.i
  		return MyComplex( self )
 	def mod_cmplx( self ):
+        '''returns the modulus of the complex number'''
  		return np.sqrt( self.r**2 + self.i**2)
 
 def read_matrix(filename):
@@ -54,7 +58,6 @@ def matrix_mult(A,B):
 
 def vec_dot_prod(A,B):
 	'''checks if the given vectors(column matrix) are of the same dimension and if dot product possible, then performs dot product A.B'''
-	import numpy as np
 	C=np.zeros_like(A)
 	C=list(C)
 	if len(A)==len(B) and len(A[0])==len(B[0])==1:
