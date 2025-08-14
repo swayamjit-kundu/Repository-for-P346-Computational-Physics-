@@ -86,6 +86,7 @@ def random_gen_LCG(a=1103515245,c=12345,m=32768,N=1000,seed=10):
         x_i=x_i_next
     return L
     
+
     
 
 
