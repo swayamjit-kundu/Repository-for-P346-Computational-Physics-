@@ -87,10 +87,36 @@ def random_gen_LCG(a=1103515245,c=12345,m=32768,N=1000,seed=10):
     return L
     
 
+'''def Gauss_jordan(l,n):
+    a=[]
+    L=[]
+    for i in l:
+        a.append(i[0])
+    l[0],l[a.index(max(a))]=l[a.index(max(a))],l[0] #swapping the row having largest zeroth value with the top row 
+    l[0]=list(np.array(l[0])/l[0][0])
+    for i in range(1,n):
+        l[i]=list(np.array(l[i])-np.array(l[0])*l[i][0])
     
+    return l
+'''
 
-
-
+def Gauss_jordan_3(l):
+    '''solves a linear equation in 3 variables using gauss jordan elimination. l= augmented matrix'''
+    a=[]
+    L=[]
+    for i in l:
+        a.append(i[0])
+    l[0],l[a.index(max(a))]=l[a.index(max(a))],l[0] #swapping the row having largest zeroth value with the top row 
+    l[0]=list(np.array(l[0])/l[0][0])
+    for i in range(1,3):
+        l[i]=list(np.array(l[i])-np.array(l[0])*l[i][0])
+    l[1]=list(np.array(l[1])/l[1][1])
+    l[2]=list(np.array(l[2])-np.array(l[1])*l[2][1])
+    l[2]=list(np.array(l[2])/l[2][2])
+    l[1]=list(np.array(l[1]-np.array(l[2])*l[1][2]))
+    l[0]=list(np.array(l[0])-np.array(l[1])*l[0][1])
+    l[0]=list(np.array(l[0])-np.array(l[2])*l[0][2])
+    return l
 
 
 
