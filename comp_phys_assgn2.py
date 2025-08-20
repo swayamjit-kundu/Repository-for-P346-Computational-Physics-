@@ -12,7 +12,29 @@ for i in f:
             k=i+j
             L.append(k)
             k=[]
-print(L)
+
+#applying gauss jordan for question 1
+print('solution=',Gauss_jordan(L,3))
 
 
-print(Gauss_jordan_3(L))
+
+#Augmentation
+f2=read_matrix('coeff1.txt')
+f3=read_matrix('const2.txt')
+K=[]
+for i in f2:
+    for j in f3:
+        if f2.index(i)==f3.index(j):
+            k=i+j
+            K.append(k)
+            k=[]
+
+#applying gauss jordan for question 2
+print('solution=',Gauss_jordan(K,6))
+
+
+'''final output:
+    
+    solution= [-2.0, -2.0, 1.0]
+    solution= [-4.215544188689968, -7.813678128256133, 0.0, 1.1252249692147385, 3.7049824760822205, 0.8879890120299325]
+'''
