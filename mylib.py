@@ -115,7 +115,35 @@ def Gauss_jordan(l,n):
     return p
 
 
+def LU_decom(A,n):
+    '''LU decomposition using Doolittle factorization'''
+    L=[]
+    U=[]
+    sum1=0
+    sum2=0
+    for i in range(n):
+        L.append([])
+        U.append([])
+        for j in range(n):
+            L[i].append(0)
+            U[i].append(0)
+    for i in range(n):
+        U[1][i]=A[1][i]
+        L[i][i]=1
+    for j in range(n):
+        for i in range(1,j):
+            for k in range(i-1):
+                sum1+=L[k][j]*U[k][j]
+            U[i][j]=A[i][j]-sum1
+        for i in range(j+1,n):   
+            for k in range(j-1):
+                sum2+=L[k][j]*U[k][j]
+            L[i][j]=(A[i][j]-sum2)/U[j][j]
+    return L,U
+    
 
+    
+    
 
 
 
