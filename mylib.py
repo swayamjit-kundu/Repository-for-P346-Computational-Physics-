@@ -33,7 +33,8 @@ def read_matrix(filename):
 	return matrix
 
 def matrix_mult(A,B):
-	'''checks whether matrix multiplication is possible or not and performs the matrix multiplication AB (if possible)'''
+	'''checks whether matrix multiplication is possible or not and performs the 
+    matrix multiplication AB (if possible)'''
 	list=[]
 	list1=[]
 	count1=0
@@ -53,7 +54,8 @@ def matrix_mult(A,B):
 		print('matrix multiplication is not possible.')
 
 def vec_dot_prod(A,B):
-	'''checks if the given vectors(column matrix) are of the same dimension and if dot product possible, then performs dot product A.B'''
+	'''checks if the given vectors(column matrix) are of the same dimension and
+    if dot product possible, then performs dot product A.B'''
 	C=np.zeros_like(A)
 	C=list(C)
 	if len(A)==len(B) and len(A[0])==len(B[0])==1:
@@ -65,7 +67,8 @@ def vec_dot_prod(A,B):
 		print('dot product is not possible.')
 
 def random_normal(c,N,seed=0.1):
-    '''generates a list of random numbers using the formula x_i+1=c*x_i*(1-x_i).  N= number of random numbers to be generated. '''
+    '''generates a list of random numbers using the formula x_i+1=c*x_i*(1-x_i). 
+    N= number of random numbers to be generated. '''
     L=[]
     x_i=seed
     L.append(x_i)
@@ -76,7 +79,8 @@ def random_normal(c,N,seed=0.1):
     return L
 
 def random_gen_LCG(a=1103515245,c=12345,m=32768,N=1000,seed=10):
-    '''generates a list of random numbers using linear congruential generator. N= number of random numbers to be generated.'''
+    '''generates a list of random numbers using linear congruential generator. 
+    N= number of random numbers to be generated.'''
     L=[]
     x_i=seed
     L.append(x_i)
@@ -88,7 +92,8 @@ def random_gen_LCG(a=1103515245,c=12345,m=32768,N=1000,seed=10):
     
 
 def Gauss_jordan(l,n):
-    '''solves a linear equation in n variables using gauss-jordan elimination. l= augmented matrix. Returns the solution as a list.'''
+    '''solves a linear equation in n variables using gauss-jordan elimination. l= augmented matrix.
+    Returns the solution as a list.'''
     a=[]
     p=[]
     for i in l:
@@ -116,7 +121,8 @@ def Gauss_jordan(l,n):
 
 
 def LU_decom(A,n):
-    '''LU decomposition using Doolittle factorization'''
+    '''performs LU decomposition using Doolittle factorization. A= input matrix, n= dimension of square matrix. 
+    Modifies the original matrix to contain the L_ij's and U_ij's, and returns the modified matrix.'''
     L=[]
     U=[]
     sum1=0
@@ -124,26 +130,62 @@ def LU_decom(A,n):
     for i in range(n):
         L.append([])
         U.append([])
-        for j in range(n):
+        for j in range(n): #creating a zero matrix of the same size as A
             L[i].append(0)
             U[i].append(0)
     for i in range(n):
-        U[1][i]=A[1][i]
-        L[i][i]=1
-    for j in range(n):
-        for i in range(1,j):
-            for k in range(i-1):
-                sum1+=L[k][j]*U[k][j]
-            U[i][j]=A[i][j]-sum1
-        for i in range(j+1,n):   
-            for k in range(j-1):
-                sum2+=L[k][j]*U[k][j]
-            L[i][j]=(A[i][j]-sum2)/U[j][j]
-    return L,U
-    
+        L[i][i]=1 # setting diagonal elements L_ii=1
+    for i in range(n):
+        for j in range(n):
+            if i>j:
+                for k in range(j):
+                    sum2+=L[i][k]*U[k][j]
+                L[i][j]=(A[i][j]-sum2)/U[j][j] #computing L_ij
+                sum2=0
+            elif i<=j:
+                for k in range(i):
+                    sum1+=L[i][k]*U[k][j]
+                U[i][j]=A[i][j]-sum1 #computing U_ij
+                sum1=0
+    for i in range(n): #for there is no need to store L_ii's 
+        L[i][i]=0
+    for i in range(n):
+        for j in range(n):
+            A[i][j]=L[i][j]+U[i][j] #storing the modified matrix(LU) in place of A
+    return A
 
-    
-    
+def zero_matrix(m,n):
+    '''creates a zero matrix of the size= m x n'''
+    L=[]
+    for i in range(m):
+        L.append([])
+        for j in range(n): 
+            L[i].append(0)
+    return L           
+            
+
+def solve_LU(A,B,n):
+    '''solves a LU decomposed matrix A (of dimensions n x n) using forward and backward
+    substitution. B is the column matrix containing the constants in the set of 
+    linear equations.'''
+    y=zero_matrix(len(B),1) #creating matrices with all values = 0
+    x=zero_matrix(len(B),1)
+    y[0][0]=B[0][0] #assigning initial value
+    sum1=0
+    sum2=0
+    for i in range(1,n):
+        for j in range(i):
+            sum1+=A[i][j]*y[j][0]
+        y[i][0]=B[i][0]-sum1 #forward substitution
+        sum1=0
+    x[n-1][0]=y[n-1][0]/A[n-1][n-1] #calculation of initial value(lower most variable in the variable column matrix)
+    for i in range(n-2,-1,-1):
+        for j in range(i+1,n):
+            sum2+=A[i][j]*x[j][0]
+        x[i][0]=(y[i][0]-sum2)/A[i][i] #backward substitution
+        sum2=0
+    return x
+
 
 
 
