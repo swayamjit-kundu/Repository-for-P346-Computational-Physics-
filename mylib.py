@@ -186,8 +186,50 @@ def solve_LU(A,B,n):
         sum2=0
     return x
 
+def cholesky(A):
+    '''performs cholesky decomposition of a given matrix A'''
+    n=len(A)
+    L=zero_matrix(n,n)
+    sum1=0
+    sum2=0
+    for i in range(n):
+        for j in range(n):
+            if i==j:
+                for k in range(i):
+                    sum1+=(L[i][k])**2
+                L[i][i]=np.sqrt(A[i][i]-sum1)
+                sum1=0
+            elif i<j:
+                for k in range(i):
+                    sum2+=L[i][k]*L[k][j]
+                L[i][j]=(A[i][j]-sum2)/L[i][i]
+                sum2=0
+    for i in range(n):
+        for j in range(n):
+            if i>j:
+                L[i][j]=L[j][i]
+    return L
 
 
+def jacobi(A,B,i_guess):
+    '''solves linear equations using jacobi method. A= matrix containing coefficients, 
+    B= matrix containing constants of the linear equations, i_guess= list containing 
+    initial guesses for the variables'''
+    n=len(A)
+    sum=0
+    x=zero_matrix(n, 1)
+    x_new=zero_matrix(n,1)
+    for i in range(len(i_guess)):
+        x[i][0]=i_guess[i]
+    while True:
+        for i in range(n):
+            for j in range(n):
+                if i!=j:
+                    sum+=A[i][j]*x[j][0]
+            x_new[i]=(B[i]-sum)/A[i][i]
+            sum=0
+            for k in range(n):
+                x_new[k][0]-x[k][0]
 
 
 
