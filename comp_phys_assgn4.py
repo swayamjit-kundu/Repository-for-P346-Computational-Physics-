@@ -1,30 +1,35 @@
 #Swayamjit Kundu, 2311196, Assignment 4 (Cholesky decomposition and Jacobi method)
 
 from mylib import *
-import numpy as np
-A=read_matrix('coeff3.txt')
+
+
+#reading the coefficient and constant matrix
+A=read_matrix('coeff3.txt') 
 B=read_matrix('const3.txt')
 
     
-print(cholesky(A)) # printing the cholesky matrix
+print(cholesky(A)) # printing the cholesky decomposed matrix(lower matrix)
+ 
 '''
 output:
-    [[2.0, 0.5, 0.5, 0.5], [0.5, 1.7320508075688772, -0.5773502691896258, 0.5773502691896258],
-     [0.5, -0.5773502691896258, 1.4142135623730951, 0.0], [0.5, 0.5773502691896258, 0.0,
-                                                           1.4142135623730951]]'''
+    [[2.0, 0, 0, 0], [0.5, 1.6583123951777, 0, 0], [0.5, -0.753778361444409,
+    1.087114613009218, 0], [0.5, 0.45226701686664544, 0.08362420100070905,
+                            1.2403473458920844]]'''
     
-print(solve_LU(cholesky(A),B,len(B))) #printing the solution after cholesky decomposition
+print(solve_chols(A, B)) #solving question 1 using cholesky decomposition
+'''output:
+
+    [[0.0], [1.0], [1.0], [1.0000000000000002]]'''
+    
+#reading the coefficient and constant matrix
+A=read_matrix('coeff3.txt')
+B=read_matrix('const3.txt')
+print(jacobi(A,B,[0,0,0,0])) #prints the solution matrix using jacobi method(Question 2)
+
 
 '''output:
 
-    [[1.1225060113390457], [0.8028691734572702], [0.25881904510252085], [0.4482877360840266]]'''
-    
-print(jacobi(A,B,[0,0,0,0]))
-
-
-'''output:
-
-    [[1.1225060113390457], [0.8028691734572702], [0.25881904510252085], [0.4482877360840266]]'''
+    [[0.0], [0.9999994039535522], [0.9999997019767761], [0.9999997019767761]]'''
 
 
 
