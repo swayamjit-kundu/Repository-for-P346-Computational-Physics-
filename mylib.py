@@ -39,7 +39,6 @@ def matrix_mult(A,B):
 	list1=[]
 	count1=0
 	if len(A[0])==len(B):
-		print('matrix multiplication is possible.')
 		for i in range(len(A)):
 			for j in range(len(B[0])):
 				for k in range(len(A[0])):
@@ -59,7 +58,6 @@ def vec_dot_prod(A,B):
 	C=np.zeros_like(A)
 	C=list(C)
 	if len(A)==len(B) and len(A[0])==len(B[0])==1:
-		print('dot product is possible.')
 		for i in range(len(A)):
 			C[i]=A[i][0]*B[i][0]
 		return C
@@ -188,48 +186,88 @@ def solve_LU(A,B,n):
 
 def cholesky(A):
     '''performs cholesky decomposition of a given matrix A'''
-    n=len(A)
-    L=zero_matrix(n,n)
-    sum1=0
-    sum2=0
+    n = len(A)
+    L = zero_matrix(n, n)
+
+    for i in range(n):
+        for j in range(i+1):
+            if i == j:  # Diagonal elements calculation
+                sum1 = sum(L[i][k] ** 2 for k in range(j))
+                L[i][i] = np.sqrt(A[i][i] - sum1)
+            else:   #Off-diagonal elements calculation
+                sum2 = sum(L[i][k] * L[j][k] for k in range(j))
+                L[i][j] = (A[i][j] - sum2) / L[j][j]
     for i in range(n):
         for j in range(n):
-            if i==j:
-                for k in range(i):
-                    sum1+=(L[i][k])**2
-                L[i][i]=np.sqrt(A[i][i]-sum1)
-                sum1=0
-            elif i<j:
-                for k in range(i):
-                    sum2+=L[i][k]*L[k][j]
-                L[i][j]=(A[i][j]-sum2)/L[i][i]
-                sum2=0
-    for i in range(n):
-        for j in range(n):
-            if i>j:
-                L[i][j]=L[j][i]
+            A[i][j]=L[i][j] #storing the decomposed matrix in the same place as of A
+    return A
+
+def sq_mat_transpose(A):
+    '''returns the transpose of the given square matrix A'''
+    L=zero_matrix(len(A), len(A))
+    for i in range(len(A)):
+        for j in range(len(A)):
+            L[i][j]=A[j][i] #L_ij=A_ji, L= transpose of A
     return L
 
+def solve_chols(A,B):
+    '''solves system of linear equations by forward-backward
+    substitution and returns the solution as a list.
+    A= Cholesky decomposed (lower) matrix of the coefficient matrix,
+    B= matrix containing constants of linear equations.'''
+    A_t=sq_mat_transpose(A) #taking transpose for creating the upper matrix
+    n=len(A)
+    y=zero_matrix(len(B),1) #creating matrices with all values = 0
+    x=zero_matrix(len(B),1)
+    y[0][0]=B[0][0]/A[0][0] #assigning initial value
+    sum1=0
+    sum2=0
+    for i in range(1,n):
+        for j in range(i):
+            sum1+=A[i][j]*y[j][0]
+        y[i][0]=(B[i][0]-sum1)/A[i][i] #forward substitution
+        sum1=0
+    x[n-1][0]=y[n-1][0]/A[n-1][n-1] #calculation of initial value(lower most variable in the variable column matrix)
+    for i in range(n-2,-1,-1):
+        for j in range(i+1,n):
+            sum2+=A_t[i][j]*x[j][0]
+        x[i][0]=(y[i][0]-sum2)/A_t[i][i] #backward substitution
+        sum2=0
+    return x
 
-def jacobi(A,B,i_guess):
+
+def jacobi(A,B,i_guess,E=10**(-6),max_iter=50):
     '''solves linear equations using jacobi method. A= matrix containing coefficients, 
     B= matrix containing constants of the linear equations, i_guess= list containing 
-    initial guesses for the variables'''
+    initial guesses for the variables. E= tolerance/precision, max_iter= max no. of iterations
+    to be performed.'''
     n=len(A)
-    sum=0
-    x=zero_matrix(n, 1)
+    sum1=0
+    l=[]
+    x=zero_matrix(n, 1) # making the variable matrices of the same dimensions as of B
     x_new=zero_matrix(n,1)
     for i in range(len(i_guess)):
-        x[i][0]=i_guess[i]
-    while True:
+        x[i][0]=i_guess[i] 
+    for itr in range(max_iter):
         for i in range(n):
             for j in range(n):
                 if i!=j:
-                    sum+=A[i][j]*x[j][0]
-            x_new[i]=(B[i]-sum)/A[i][i]
-            sum=0
+                    sum1+=A[i][j]*x[j][0]
+            x_new[i][0]=(B[i][0]-sum1)/A[i][i]   #calculation of new guess
+            sum1=0
             for k in range(n):
-                x_new[k][0]-x[k][0]
+                l.append(abs(x_new[k][0]-x[k][0])<E) #appending true or false
+        if all(l):   #checking the achieved precision
+            return x_new
+            break
+        l=[]
+        x = [row[:] for row in x_new] #updating guess
+        if itr==max_iter-1:
+            print('"Jacobi method did not converge within max_iter"')
+            
+
+
+
 
 
 
